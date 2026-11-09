@@ -1,4 +1,4 @@
-import { HttpResponse, graphql } from 'msw';
+import { HttpResponse, graphql, type GraphQLResponseBody } from 'msw';
 
 const endpoint = graphql.link('http://localhost:3000/graphql');
 
@@ -115,7 +115,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const jitter = (min: number, max: number) => min + Math.random() * (max - min);
 
 function gqlError(message: string) {
-  return HttpResponse.json({ errors: [{ message }] }, { status: 200 });
+  return HttpResponse.json<GraphQLResponseBody<never>>({ errors: [{ message }] }, { status: 200 });
 }
 
 function requireTenant(tenantId: unknown): string | null {
