@@ -2,7 +2,7 @@ export const GRAPHQL_ENDPOINT = 'http://localhost:3000/graphql';
 
 export type Variables = Record<string, unknown>;
 
-/** Normalised result every layer above the transport works with. */
+// result shape used by everything above the fetch layer
 export type GraphQLResult<TData> = {
   data: TData | undefined;
   errors: string[];
@@ -18,7 +18,7 @@ type RawGraphQLResponse<TData> = {
   errors?: RawGraphQLError[];
 };
 
-/* Sends one GraphQL operation over plain fetch. */
+// sends one GraphQL operation with plain fetch
 export async function gqlFetch<TData>(
   query: string,
   variables?: Variables,
@@ -56,9 +56,8 @@ export async function gqlFetch<TData>(
   };
 }
 
-/** "deviceDetail.imsi: Subscriber record unavailable" — keeps the field path
- *  inside the string[] the contract allows, so the UI can still say WHICH
- *  field failed. */
+// e.g. "deviceDetail.imsi: Subscriber record unavailable". keeps the field
+// path so the UI can show which field failed
 function formatError(e: RawGraphQLError): string {
   return e.path?.length ? `${e.path.join('.')}: ${e.message}` : e.message;
 }
